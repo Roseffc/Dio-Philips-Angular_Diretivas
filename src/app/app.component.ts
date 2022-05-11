@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { PeopleService } from './shared/services/people.service';
+
+export interface Pessoa {
+  name: string;
+  profission: string;
+  age: number
+}
+
 
 @Component({
   selector: 'app-root',
@@ -12,43 +20,33 @@ export class AppComponent implements OnInit {
   // two e data base
   text = '';
 
+  pessoas: Pessoa[] = [];
 
-  pessoas = [
-    {
-      nome: "Rosangela",
-      profissao: "Desenvolvedora Fron-End"
-    },
-    {
-      nome: "Messias",
-      profissao: "Desenvolvedor Fron-End"
-    },
-    {
-      nome: "Ellen",
-      profissao: "Médica"
-    },
-    {
-      nome: "Gabriel",
-      profissao: "Engenheiro Químico"
-    }
-  ];
-
-  constructor() {
+  constructor(private peopleService: PeopleService) {
 
   }
 
   ngOnInit() {
-    console.log(this.pessoas);
-    let interval = setInterval(() => {
+      // console.log(this.pessoas);
+      this.getPeople();
+      let interval = setInterval(() => {
       this.count++;
       if(this.count === 10){
         clearInterval(interval);
       }
     }, 1000)
+    
   }
 
   // para passar informações do html para a logica 
 
   clicou(nome: string): void{
     console.log('clicou em min', nome)
+  }
+
+  getPeople() {
+    this.peopleService.getPeople().subscribe(people => {
+      this.pessoas = people;
+    })
   }
 }
